@@ -1,0 +1,23 @@
+let
+    Fonte = arquivo_bruto,
+    add_FlagGrupo = Table.AddColumn(Fonte, "FlagGrupo", (r)=> List.First(
+       List.Select(
+           {"Empresa", "Local"},
+           (i) => Text.StartsWith( r[Column1], i )
+       )
+    ),
+    type text
+),
+    add_Index = Table.AddIndexColumn(add_FlagGrupo, "Indice", 1, 1, Int64.Type),
+    add_IndiceGrupo = Table.AddColumn(add_Index, 
+    "IndiceGrupo", 
+    each List.Accumulate(
+       List.FirstN(add_Index[FlagGrupo], [Indice]),
+       0,
+       (state, current) => if current <> null then state + 1 else state 
+    ), 
+Int64.Type
+),
+    flagGrupoPreenchidoAbaixo = Table.FillDown(add_IndiceGrupo,{"FlagGrupo"})
+in
+    flagGrupoPreenchidoAbaixo
