@@ -135,7 +135,7 @@
                         {"SalarioNominal", Currency.Type},
                         {"Situacao", type text},
                         {"Descricao", type text},
-                        {"Qtde", type text},
+                        {"Qtde", type number},
                         {"Valor", Currency.Type}
                     }
                 )
