@@ -1,0 +1,11 @@
+let
+    Fonte = Table.Skip(planilha_bruta, 5),
+    add_Indice = Table.AddIndexColumn(Fonte, "Indice", 1, 1, Int64.Type),
+    add_IndiceLocal = Table.AddColumn(add_Indice, "IndiceLocal", each List.Accumulate(
+    List.FirstN(add_Indice[Column1], [Indice]),
+    0,
+    (acumulador, atual) => try if Text.StartsWith(atual, "Local") then acumulador + 1 else acumulador otherwise acumulador
+), Int64.Type
+)
+in
+    add_IndiceLocal
